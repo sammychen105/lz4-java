@@ -24,7 +24,7 @@ def dest_file(path) {
 
 def generate_decompressors() {
   compiledTemplate = get_template("decompressor.template");
-  for (type : ["Safe", "Unsafe"]) {
+  for (type : ["Safe"]) {
     for (size : ["Fast", "Safe"]) {
       dest = dest_file("lz4/LZ4Java" + type + size + "Decompressor.java");
       args = new HashMap();
@@ -37,7 +37,7 @@ def generate_decompressors() {
 
 def generate_compressors() {
   compiledTemplate = get_template("compressor.template");
-  for (type : ["Safe", "Unsafe"]) {
+  for (type : ["Safe"]) {
     dest = dest_file("lz4/LZ4Java" + type + "Compressor.java");
     args = new HashMap();
     args.put("type", type);
@@ -47,7 +47,7 @@ def generate_compressors() {
 
 def generate_hc_compressors() {
   compiledTemplate = get_template("compressor_hc.template");
-  for (type : ["Safe", "Unsafe"]) {
+  for (type : ["Safe"]) {
     dest = dest_file("lz4/LZ4HCJava" + type + "Compressor.java");
     args = new HashMap();
     args.put("type", type);
@@ -57,7 +57,7 @@ def generate_hc_compressors() {
 
 def generate_xxhash() {
   compiledTemplate = get_template("xxhash.template");
-  for (type : ["Safe", "Unsafe"]) {
+  for (type : ["Safe"]) {
     dest = dest_file("xxhash/XXHash32Java" + type + ".java");
     args = new HashMap();
     args.put("type", type);
@@ -67,7 +67,7 @@ def generate_xxhash() {
 
 def generate_streaming_xxhash() {
   compiledTemplate = get_template("xxhash_streaming.template");
-  for (type : ["Safe", "Unsafe"]) {
+  for (type : ["Safe"]) {
     dest = dest_file("xxhash/StreamingXXHash32Java" + type + ".java");
     args = new HashMap();
     args.put("type", type);
@@ -77,6 +77,5 @@ def generate_streaming_xxhash() {
 
 generate_decompressors();
 generate_compressors();
-generate_hc_compressors();
 generate_xxhash();
 generate_streaming_xxhash();

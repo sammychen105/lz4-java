@@ -146,7 +146,7 @@
     </javac>
   </target>
 
-  <target name="generate-headers" depends="compile-java" unless="${skip.jni}">
+  <!-- target name="generate-headers" depends="compile-java" unless="${skip.jni}">
     <mkdir dir="${build}/jni-headers" />
     <javah
       destDir="${build}/jni-headers">
@@ -156,7 +156,7 @@
       <class name="net.jpountz.lz4.LZ4JNI" />
       <class name="net.jpountz.xxhash.XXHashJNI" />
     </javah>
-  </target>
+  </target -->
 
 
 
@@ -255,9 +255,9 @@
       destfile="${dist}/${ivy.module}-${ivy.revision}.jar">
       <!-- fileset dir="${src}/resources" erroronmissingdir="false" /-->
       <fileset dir="${build}/classes" />
-      <fileset dir="${build}/unsafe-classes" />
+      <!-- fileset dir="${build}/unsafe-classes" /-->
       <fileset dir="${build}/generated-classes" />
-      <fileset dir="${build}/jni" erroronmissingdir="false" />
+      <!-- fileset dir="${build}/jni" erroronmissingdir="false" /-->
     </jar>
   </target>
 
