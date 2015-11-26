@@ -158,27 +158,9 @@
     </javah>
   </target>
 
-  <target name="compile-jni" depends="install-cpptasks,generate-headers" unless="${skip.jni}">
-    <mkdir dir="${build}/objects" />
-    <mkdir dir="${build}/jni/${platform}/${os.arch}" />
-    <cpptasks:cc
-      debug="false"
-      optimize="extreme"
-      objdir="${build}/objects"
-      outfile="${build}/jni/${platform}/${os.arch}/lz4-java"
-      outtype="shared">
-      <includepath path="${src}/lz4" />
-      <includepath path="${src}/xxhash" />
-      <includepath path="${java.home}/../include" />
-      <includepath path="${java.home}/../include/${platform}/" />
-      <includepath path="${build}/jni-headers" />
-      <fileset dir="${src}/lz4" includes="lz4.c, lz4hc.c, xxhash.c" />
-      <fileset dir="${src}/jni" includes="*.c" />
-      <linker />
-    </cpptasks:cc>
-  </target>
 
-  <target name="compile" depends="compile-java, compile-jni" />
+
+  <target name="compile" depends="compile-java" />
 
   <target name="compile-tests" depends="compile">
     <mkdir dir="${build}/test-classes" />
@@ -271,7 +253,7 @@
     <mkdir dir="${dist}" />
     <jar
       destfile="${dist}/${ivy.module}-${ivy.revision}.jar">
-      <fileset dir="${src}/resources" erroronmissingdir="false" />
+      <!-- fileset dir="${src}/resources" erroronmissingdir="false" /-->
       <fileset dir="${build}/classes" />
       <fileset dir="${build}/unsafe-classes" />
       <fileset dir="${build}/generated-classes" />

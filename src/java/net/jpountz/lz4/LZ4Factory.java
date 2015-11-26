@@ -17,7 +17,6 @@ package net.jpountz.lz4;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import net.jpountz.util.Native;
 
 /**
  * Entry point for the LZ4 API.
@@ -123,16 +122,7 @@ public final class LZ4Factory {
    * using this method.
    */
   public static LZ4Factory fastestInstance() {
-    if (Native.isLoaded()
-        || Native.class.getClassLoader() == ClassLoader.getSystemClassLoader()) {
-      try {
-        return nativeInstance();
-      } catch (Throwable t) {
-        return fastestJavaInstance();
-      }
-    } else {
       return fastestJavaInstance();
-    }
   }
 
   @SuppressWarnings("unchecked")
