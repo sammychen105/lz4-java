@@ -170,7 +170,7 @@ public class LZ4BlockStreamingTest extends AbstractLZ4Test {
     }
     final LZ4Compressor compressor = randomBoolean()
         ? LZ4Factory.fastestInstance().fastCompressor()
-        : LZ4Factory.fastestInstance().highCompressor();
+        : LZ4Factory.fastestInstance().fastCompressor();
     final Checksum checksum;
     switch (randomInt(2)) {
     case 0:

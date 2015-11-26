@@ -323,5 +323,21 @@
   <target name="-stage" depends="clean,dist">
     <deploy repositoryid="sonatype-nexus-staging" repositoryurl="https://oss.sonatype.org/service/local/staging/deploy/maven2" />
   </target>
+	
+  <target name="publish-ivy"  depends="dist" description="Publish WZP-Service-Template">
+        <ivy:settings id="ivy.pub.settings" file="publish_to_repo_mail_settings.xml" />
+
+        <!-- Generate the Maven POM -->
+        <ivy:info file="ivy.xml" />
+        <ivy:makepom conf="runtime,optional" ivyfile="ivy.xml" pomfile="${dist}/${ivy.module}-${ivy.revision}.pom">
+            <mapping conf="runtime" scope="runtime" />
+        </ivy:makepom>
+
+        <ivy:resolve file="ivy.xml" />
+        <ivy:publish settingsref="ivy.pub.settings" resolver="publish-release" conf="default,optional" overwrite="true" publishivy="false">
+            <artifacts pattern="${dist}/[artifact]-${ivy.revision}(-[classifier]).[ext]" />
+        </ivy:publish>
+    	
+    </target>    
 
 </project>

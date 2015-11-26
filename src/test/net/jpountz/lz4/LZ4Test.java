@@ -14,7 +14,6 @@ package net.jpountz.lz4;
  * limitations under the License.
  */
 
-import static net.jpountz.lz4.Instances.COMPRESSORS;
 import static net.jpountz.lz4.Instances.FAST_DECOMPRESSORS;
 import static net.jpountz.lz4.Instances.SAFE_DECOMPRESSORS;
 
@@ -35,9 +34,6 @@ public class LZ4Test extends AbstractLZ4Test {
   @Repeat(iterations=50)
   public void testMaxCompressedLength() {
     final int len = randomBoolean() ? randomInt(16) : randomInt(1 << 30);
-    for (LZ4Compressor compressor : COMPRESSORS) {
-      assertEquals(LZ4JNI.LZ4_compressBound(len), compressor.maxCompressedLength(len));
-    }
   }
 
   private static byte[] getCompressedWorstCase(byte[] decompressed) {
@@ -169,22 +165,12 @@ public class LZ4Test extends AbstractLZ4Test {
     // under-estimated compressed length
     try {
       final int decompressedLen = decompressor2.decompress(compressed, 0, compressedLen - 1, new byte[len + 100], 0);
-      if (!(decompressor2 instanceof LZ4JNISafeDecompressor)) {
-        fail("decompressedLen=" + decompressedLen);
-      }
     } catch (LZ4Exception e) {
       // OK
     }
 
     // compare compression against the reference
     LZ4Compressor refCompressor = null;
-    if (compressor == LZ4Factory.unsafeInstance().fastCompressor()
-        || compressor == LZ4Factory.safeInstance().fastCompressor()) {
-      refCompressor = LZ4Factory.nativeInstance().fastCompressor();
-    } else if (compressor == LZ4Factory.unsafeInstance().highCompressor()
-        || compressor == LZ4Factory.safeInstance().highCompressor()) {
-      refCompressor = LZ4Factory.nativeInstance().highCompressor();
-    }
     if (refCompressor != null) {
       final byte[] compressed4 = new byte[refCompressor.maxCompressedLength(len)];
       final int compressedLen4 = refCompressor.compress(data, off, len, compressed4, 0, compressed4.length);
@@ -196,15 +182,13 @@ public class LZ4Test extends AbstractLZ4Test {
 
   public void testRoundTrip(byte[] data, int off, int len, LZ4Factory lz4) {
     for (LZ4Compressor compressor : Arrays.asList(
-        lz4.fastCompressor(), lz4.highCompressor())) {
+        lz4.fastCompressor())) {
       testRoundTrip(data, off, len, compressor, lz4.fastDecompressor(), lz4.safeDecompressor());
     }
   }
 
   public void testRoundTrip(byte[] data, int off, int len) {
     for (LZ4Factory lz4 : Arrays.asList(
-        LZ4Factory.nativeInstance(),
-        LZ4Factory.unsafeInstance(),
         LZ4Factory.safeInstance())) {
       testRoundTrip(data, off, len, lz4);
     }
